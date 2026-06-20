@@ -1,10 +1,29 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from '../../../src/components/Navbar';
+import Footer from '../../../src/components/Footer';
+import Home from '../../../src/pages/Home';
+import Dashboard from '../../../src/pages/Dashboard';
+import About from '../../../src/pages/About';
+import Login from '../../../src/pages/Login';
+
 function App() {
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <h1 className="text-5xl font-bold text-green-600">
-        AI Crop Advisory Chatbot
-      </h1>
-    </div>
+    <Router>
+      <div className="flex flex-col min-h-screen">
+        <Navbar />
+        
+        <main className="flex-grow">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </main>
+
+        <Footer />
+      </div>
+    </Router>
   );
 }
 
