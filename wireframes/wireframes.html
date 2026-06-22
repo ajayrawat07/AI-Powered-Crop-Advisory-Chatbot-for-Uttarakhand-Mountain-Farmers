@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wireframes - Crop Advisory Chatbot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            margin-bottom: 30px;
+            text-align: center;
+            color: #333;
+        }
+        
+        .wireframes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .wireframe {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .wireframe-title {
+    background: #999;
+    color: white;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: bold;
+}
+        
+        .wireframe-content {
+            padding: 20px;
+            background: white;
+            min-height: 400px;
+        }
+        
+        /* Lo-fi wireframe styles */
+        .wire-header {
+            background: #ddd;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .wire-logo {
+            background: #999;
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+        }
+        
+        .wire-nav {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .wire-nav-item {
+            background: #ccc;
+            padding: 8px 12px;
+            border-radius: 3px;
+            font-size: 12px;
+            min-width: 50px;
+        }
+        
+        .wire-hero {
+            background: #e0e0e0;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        
+        .wire-text {
+            background: #f0f0f0;
+            padding: 8px;
+            margin-bottom: 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .wire-text.large {
+            height: 30px;
+            background: #d0d0d0;
+        }
+        
+        .wire-text.small {
+            height: 15px;
+        }
+        
+        .wire-button {
+    background: #bbb;
+    color: #333;
+}
+        
+        .wire-form {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 4px;
+        }
+        
+        .wire-input {
+            background: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 10px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+        
+        .wire-card {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+        
+        .wire-card-header {
+            background: #e8e8e8;
+            height: 80px;
+            margin-bottom: 10px;
+            border-radius: 3px;
+        }
+        
+        .wire-footer {
+            background: #ddd;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 11px;
+            color: #666;
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌾 Crop Advisory Chatbot - Wireframes</h1>
+        <p style="text-align: center; color: #666; margin-bottom: 40px;">Lo-fi Wireframes for 5 Core Screens</p>
+        
+        <div class="wireframes-grid">
+            <!-- Screen 1: Home -->
+            <div class="wireframe">
+                <div class="wireframe-title">1. Home Screen</div>
+                <div class="wireframe-content">
+                    <div class="wire-header">
+                        <div class="wire-logo"></div>
+                        <div class="wire-nav">
+                            <div class="wire-nav-item">Home</div>
+                            <div class="wire-nav-item">Services</div>
+                            <div class="wire-nav-item">Login</div>
+                        </div>
+                    </div>
+                    
+                    <div class="wire-hero">
+                        <div class="wire-text large"></div>
+                        <p style="font-size: 11px; color: #999; margin-top: 10px;">Hero title and subtitle</p>
+                    </div>
+                    
+                    <div class="wire-text"></div>
+                    <div class="wire-text"></div>
+                    <div class="wire-text small"></div>
+                    
+                    <div style="margin-top: 20px;">
+                        <button class="wire-button">Get Started</button>
+                    </div>
+                    
+                    <div class="wire-footer">
+                        Footer content with links and copyright
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Screen 2: Dashboard -->
+            <div class="wireframe">
+                <div class="wireframe-title">2. Dashboard Screen</div>
+                <div class="wireframe-content">
+                    <div class="wire-header">
+                        <div class="wire-logo"></div>
+                        <div style="font-size: 12px; color: #666;">User Profile</div>
+                    </div>
+                    
+                    <div class="wire-text large"></div>
+                    <p style="font-size: 10px; color: #999; margin: 10px 0;">Dashboard Heading</p>
+                    
+                    <div class="grid-2">
+                        <div class="wire-card">
+                            <div class="wire-card-header"></div>
+                            <div class="wire-text small"></div>
+                        </div>
+                        <div class="wire-card">
+                            <div class="wire-card-header"></div>
+                            <div class="wire-text small"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid-2" style="margin-top: 10px;">
+                        <div class="wire-card">
+                            <div class="wire-card-header"></div>
+                            <div class="wire-text small"></div>
+                        </div>
+                        <div class="wire-card">
+                            <div class="wire-card-header"></div>
+                            <div class="wire-text small"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="wire-footer">
+                        Navigation Footer
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Screen 3: Detail/List View -->
+            <div class="wireframe">
+                <div class="wireframe-title">3. Detail/List View</div>
+                <div class="wireframe-content">
+                    <div class="wire-header">
+                        <div class="wire-logo"></div>
+                        <div class="wire-nav">
+                            <div class="wire-nav-item">← Back</div>
+                        </div>
+                    </div>
+                    
+                    <div class="wire-text large"></div>
+                    <p style="font-size: 10px; color: #999; margin: 10px 0;">List/Detail Heading</p>
+                    
+                    <div class="wire-card">
+                        <div style="background: #f0f0f0; padding: 10px; border-radius: 3px; margin-bottom: 10px;">Item 1</div>
+                        <div class="wire-text small"></div>
+                    </div>
+                    
+                    <div class="wire-card">
+                        <div style="background: #f0f0f0; padding: 10px; border-radius: 3px; margin-bottom: 10px;">Item 2</div>
+                        <div class="wire-text small"></div>
+                    </div>
+                    
+                    <div class="wire-card">
+                        <div style="background: #f0f0f0; padding: 10px; border-radius: 3px; margin-bottom: 10px;">Item 3</div>
+                        <div class="wire-text small"></div>
+                    </div>
+                    
+                    <div class="wire-footer">
+                        Pagination or Load More
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Screen 4: Login/Signup -->
+            <div class="wireframe">
+                <div class="wireframe-title">4. Login/Signup Screen</div>
+                <div class="wireframe-content">
+                    <div class="wire-header">
+                        <div class="wire-logo"></div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <div class="wire-text large" style="width: 200px; margin: 0 auto;"></div>
+                        <p style="font-size: 11px; color: #999; margin-top: 10px;">Authentication Form</p>
+                    </div>
+                    
+                    <div class="wire-form">
+                        <input class="wire-input" placeholder="Email">
+                        <input class="wire-input" placeholder="Password">
+                        <input class="wire-input" placeholder="Confirm Password">
+                        
+                        <div style="margin-top: 15px;">
+                            <button class="wire-button" style="width: 100%;">Sign In / Sign Up</button>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 10px; font-size: 11px; color: #666;">
+                            Forgot password? | Terms & Conditions
+                        </div>
+                    </div>
+                    
+                    <div class="wire-footer">
+                        © 2024 Crop Advisory Platform
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Screen 5: AI Feature/Chat -->
+            <div class="wireframe">
+                <div class="wireframe-title">5. AI Feature/Chat Screen</div>
+                <div class="wireframe-content">
+                    <div class="wire-header">
+                        <div class="wire-logo"></div>
+                        <div style="font-size: 12px; color: #666;">AI Chat Assistant</div>
+                    </div>
+                    
+                    <div style="background: #f9f9f9; padding: 10px; height: 200px; margin-bottom: 15px; border-radius: 4px; overflow-y: auto;">
+                        <div style="background: #e8e8e8; padding: 10px; margin-bottom: 10px; border-radius: 3px; width: 80%;">
+                            <div class="wire-text small"></div>
+                        </div>
+                        <div style="background: #d0e0c0; padding: 10px; margin-bottom: 10px; border-radius: 3px; width: 80%; margin-left: auto;">
+                            <div class="wire-text small"></div>
+                        </div>
+                        <div style="background: #e8e8e8; padding: 10px; margin-bottom: 10px; border-radius: 3px; width: 80%;">
+                            <div class="wire-text small"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="wire-form" style="margin-top: 15px;">
+                        <div style="display: flex; gap: 10px;">
+                            <input class="wire-input" placeholder="Ask your question..." style="flex: 1; margin-bottom: 0;">
+                            <button class="wire-button">Send</button>
+                        </div>
+                    </div>
+                    
+                    <div class="wire-footer">
+                        Powered by AI Assistant
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Specifications -->
+        <div style="background: white; padding: 30px; border-radius: 8px; margin-bottom: 30px;">
+            <h2 style="margin-bottom: 20px; color: #333;">📋 Wireframe Specifications</h2>
+            
+            <h3 style="margin-top: 20px; color: #2d5016;">Shared Components Across All Screens</h3>
+            <ul style="margin-left: 20px; color: #666; line-height: 1.8;">
+                <li><strong>Header:</strong> Logo, Navigation items, Theme toggle (dark/light)</li>
+                <li><strong>Footer:</strong> Links, copyright, social media placeholders</li>
+                <li><strong>Colors:</strong> Primary: #2d5016 (green), Secondary: #4a7c2c, Neutral: #666, #999, #ccc</li>
+                <li><strong>Typography:</strong> Grey boxes for text placeholders (lo-fi style)</li>
+            </ul>
+            
+            <h3 style="margin-top: 20px; color: #2d5016;">Screen Details</h3>
+            <div style="background: #f9f9f9; padding: 15px; border-radius: 4px; margin-top: 10px;">
+                <p><strong>1. Home Screen:</strong> Hero section, CTA buttons, featured content cards</p>
+                <p style="margin-top: 10px;"><strong>2. Dashboard:</strong> 4 main card components with data visualization placeholders</p>
+                <p style="margin-top: 10px;"><strong>3. Detail/List View:</strong> Filterable list with expandable details</p>
+                <p style="margin-top: 10px;"><strong>4. Login/Signup:</strong> Form with email, password, confirm password fields</p>
+                <p style="margin-top: 10px;"><strong>5. AI Chat:</strong> Chat conversation area with message bubbles and input field</p>
+            </div>
+            
+            <h3 style="margin-top: 20px; color: #2d5016;">Responsive Breakpoints</h3>
+            <ul style="margin-left: 20px; color: #666; line-height: 1.8;">
+                <li><strong>Mobile:</strong> 375px (single column layout)</li>
+                <li><strong>Tablet:</strong> 768px (2-column grid)</li>
+                <li><strong>Desktop:</strong> 1440px (multi-column layout)</li>
+            </ul>
+            
+            <h3 style="margin-top: 20px; color: #2d5016;">Additional Features</h3>
+            <ul style="margin-left: 20px; color: #666; line-height: 1.8;">
+                <li>Dark/Light mode toggle in header</li>
+                <li>Hover states on buttons and interactive elements</li>
+                <li>Loading states with spinner/skeleton loaders</li>
+                <li>Toast notifications for feedback</li>
+                <li>Modal dialogs for confirmations</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
