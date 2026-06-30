@@ -1,0 +1,12 @@
+{
+  "name": "crop-advisory-backend",
+  "version": "1.0.0",
+  "description": "Native Node.js backend for Crop Advisory Chatbot",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
