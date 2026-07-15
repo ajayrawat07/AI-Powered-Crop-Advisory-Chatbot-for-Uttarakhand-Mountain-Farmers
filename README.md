@@ -34,7 +34,7 @@ The goal of this project is to help farmers make informed decisions, improve cro
 
 ### Database
 
-* In-memory store (easily swappable to MongoDB)
+* MongoDB with Mongoose (ODM) for data persistence.
 
 ### AI Integration
 
@@ -90,10 +90,69 @@ npm run dev
 
 ```bash
 cd backend
-node server.js
+npm install
+node seed.js    # Populates initial mock data into MongoDB
+node server.js  # Starts backend server
 ```
 
 The backend will start at `http://127.0.0.1:5000`.
+
+---
+
+## Database Integration & Choice
+
+We use **MongoDB** with **Mongoose** (ODM) for storing the application data.
+
+### Why MongoDB?
+1. **Flexible, Document-Oriented Schema**: The crop advisory data contains nested fields, variable text sizes (advisory notes and recommended actions), and agricultural metadata. MongoDB's JSON-like document model naturally fits this structure without complex SQL joins.
+2. **Horizontal Scalability**: Perfect for growing regional datasets across Uttarakhand's different terrains and weather stations.
+3. **Mongoose Middleware & Modeling**: Mongoose simplifies schema definition, validation, and JSON serialization.
+
+### Database Schema Diagram
+
+Below is the database design visual:
+
+![Database Schema](db_schema.png)
+
+```mermaid
+classDiagram
+  class Crop {
+    +ObjectId _id
+    +String name
+    +String category
+    +String altitude_range
+    +String soil_type
+    +String watering_frequency
+    +String growth_stage
+    +String health_status
+    +String recommended_action
+    +String advisory_notes
+    +Date createdAt
+    +Date updatedAt
+  }
+
+  class WeatherAlert {
+    +ObjectId _id
+    +String type
+    +String title
+    +String message
+    +Date createdAt
+    +Date updatedAt
+  }
+```
+
+## How to Set Up the Database
+
+1. **Install MongoDB**: Ensure you have MongoDB running locally (default port `27017`) or have a remote MongoDB Atlas URI.
+2. **Configure `.env`**: Make sure your `.env` file in the `backend/` directory specifies your `MONGO_URI` connection string, e.g.:
+   ```
+   MONGO_URI="mongodb://localhost:27017/crop_advisory"
+   ```
+3. **Install Dependencies**: Run `npm install` inside the `backend` folder to install `mongoose`.
+4. **Seed Database**: Execute the seeding script to populate the database with default crop and weather alert data:
+   ```bash
+   node seed.js
+   ```
 
 ---
 

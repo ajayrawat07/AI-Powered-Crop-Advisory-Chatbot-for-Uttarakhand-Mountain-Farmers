@@ -1,8 +1,10 @@
 import http from 'http';
 import fs from 'fs';
 import path from 'path';
-import crypto from 'crypto';
 import { fileURLToPath } from 'url';
+import mongoose from 'mongoose';
+import { Crop } from './models/Crop.js';
+import { WeatherAlert } from './models/WeatherAlert.js';
 
 // Get current directory path in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -33,6 +35,12 @@ loadEnv();
 
 const PORT = parseInt(process.env.PORT || '5000', 10);
 const HOST = process.env.HOST || '127.0.0.1';
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/crop_advisory';
+
+// Connect to MongoDB
+mongoose.connect(MONGO_URI)
+  .then(() => console.log(`Connected to MongoDB at ${MONGO_URI}`))
+  .catch(err => console.error('MongoDB connection error:', err));
 
 // Allowed origins for CORS
 const ALLOWED_ORIGINS = [
@@ -40,73 +48,6 @@ const ALLOWED_ORIGINS = [
   'http://127.0.0.1:5173',
   'http://localhost:5000',
   'http://127.0.0.1:5000'
-];
-
-// In-memory database matching the Python FastAPI implementation
-let CROPS_DB = [
-  {
-    "id": "1",
-    "name": "Finger Millet (Mandua)",
-    "category": "Millet",
-    "altitude_range": "1000m - 2500m",
-    "soil_type": "Sandy Loam / Loamy",
-    "watering_frequency": "Low (Rainfed)",
-    "growth_stage": "Vegetative",
-    "health_status": "Excellent",
-    "recommended_action": "Keep monitoring soil moisture. Water only if soil feels completely dry.",
-    "advisory_notes": "Well suited for drylands and sloping mountain terrains. Rich in calcium."
-  },
-  {
-    "id": "2",
-    "name": "Barnyard Millet (Jhangora)",
-    "category": "Millet",
-    "altitude_range": "800m - 2000m",
-    "soil_type": "Gravelly / Poor Soils",
-    "watering_frequency": "Low",
-    "growth_stage": "Flowering",
-    "health_status": "Good",
-    "recommended_action": "Check for shoot fly infestation. Keep weed-free.",
-    "advisory_notes": "Traditional crop with short maturity period. High fiber content."
-  },
-  {
-    "id": "3",
-    "name": "Black Soybean (Bhatt)",
-    "category": "Pulse",
-    "altitude_range": "1000m - 2000m",
-    "soil_type": "Sandy Loam",
-    "watering_frequency": "Moderate",
-    "growth_stage": "Vegetative",
-    "health_status": "Excellent",
-    "recommended_action": "Ensure proper drainage around roots to prevent root rot.",
-    "advisory_notes": "Essential part of Kumaoni and Garhwali diet. Highly nutritious."
-  },
-  {
-    "id": "4",
-    "name": "Harsil Rajma (Kidney Beans)",
-    "category": "Pulse",
-    "altitude_range": "1800m - 3000m",
-    "soil_type": "Deep Rich Loamy",
-    "watering_frequency": "Moderate",
-    "growth_stage": "Fruiting",
-    "health_status": "Needs Attention",
-    "recommended_action": "Watering levels are slightly low. Increase watering during the fruiting stage.",
-    "advisory_notes": "Premium quality high-altitude pulse with unique taste. High demand."
-  }
-];
-
-const WEATHER_ALERTS = [
-  {
-    "id": "w1",
-    "type": "warning",
-    "title": "Heavy Rainfall Warning",
-    "message": "Heavy rain forecast for Uttarkashi and Chamoli districts over the next 48 hours. Ensure clear drainage channels in your terrace fields to prevent soil erosion."
-  },
-  {
-    "id": "w2",
-    "type": "info",
-    "title": "Frost Alert",
-    "message": "Night temperatures expected to drop below 5°C in altitudes above 2200m. Consider mulching for sensitive young crops."
-  }
 ];
 
 // Helper to write JSON responses
@@ -168,7 +109,8 @@ const server = http.createServer(async (req, res) => {
 
     // Endpoint: GET /api/weather
     if (pathname === '/api/weather' && req.method === 'GET') {
-      return sendJSON(res, 200, WEATHER_ALERTS);
+      const alerts = await WeatherAlert.find({});
+      return sendJSON(res, 200, alerts);
     }
 
     // Endpoint: GET /api/crops/search
@@ -177,13 +119,15 @@ const server = http.createServer(async (req, res) => {
       if (!q) {
         return sendJSON(res, 400, { detail: "Search query parameter 'q' is required." });
       }
-      const qLower = q.toLowerCase();
-      const results = CROPS_DB.filter(c => 
-        c.name.toLowerCase().includes(qLower) ||
-        c.category.toLowerCase().includes(qLower) ||
-        (c.advisory_notes && c.advisory_notes.toLowerCase().includes(qLower)) ||
-        (c.recommended_action && c.recommended_action.toLowerCase().includes(qLower))
-      );
+      const qRegex = new RegExp(q, 'i');
+      const results = await Crop.find({
+        $or: [
+          { name: qRegex },
+          { category: qRegex },
+          { advisory_notes: qRegex },
+          { recommended_action: qRegex }
+        ]
+      });
       return sendJSON(res, 200, results);
     }
 
@@ -192,13 +136,14 @@ const server = http.createServer(async (req, res) => {
       const category = parsedUrl.searchParams.get('category');
       const healthStatus = parsedUrl.searchParams.get('health_status');
       
-      let results = [...CROPS_DB];
+      let filter = {};
       if (category) {
-        results = results.filter(c => c.category.toLowerCase() === category.toLowerCase());
+        filter.category = { $regex: new RegExp(`^${category}$`, 'i') };
       }
       if (healthStatus) {
-        results = results.filter(c => c.health_status.toLowerCase() === healthStatus.toLowerCase());
+        filter.health_status = { $regex: new RegExp(`^${healthStatus}$`, 'i') };
       }
+      const results = await Crop.find(filter);
       return sendJSON(res, 200, results);
     }
 
@@ -206,7 +151,10 @@ const server = http.createServer(async (req, res) => {
     const cropGetMatch = pathname.match(/^\/api\/crops\/([^/]+)$/);
     if (cropGetMatch && req.method === 'GET') {
       const cropId = cropGetMatch[1];
-      const crop = CROPS_DB.find(c => c.id === cropId);
+      let crop = null;
+      if (mongoose.Types.ObjectId.isValid(cropId)) {
+        crop = await Crop.findById(cropId);
+      }
       if (crop) {
         return sendJSON(res, 200, crop);
       } else {
@@ -229,8 +177,7 @@ const server = http.createServer(async (req, res) => {
         return sendJSON(res, 400, { detail: "Name, Category, and Health Status are required fields." });
       }
 
-      const newCrop = {
-        id: crypto.randomUUID().substring(0, 8),
+      const newCrop = new Crop({
         name: payload.name,
         category: payload.category,
         altitude_range: payload.altitude_range || "1000m - 2500m",
@@ -240,9 +187,9 @@ const server = http.createServer(async (req, res) => {
         health_status: payload.health_status,
         recommended_action: payload.recommended_action || "",
         advisory_notes: payload.advisory_notes || ""
-      };
+      });
 
-      CROPS_DB.push(newCrop);
+      await newCrop.save();
       return sendJSON(res, 201, newCrop);
     }
 
@@ -250,9 +197,8 @@ const server = http.createServer(async (req, res) => {
     const cropPutMatch = pathname.match(/^\/api\/crops\/([^/]+)$/);
     if (cropPutMatch && req.method === 'PUT') {
       const cropId = cropPutMatch[1];
-      const cropIdx = CROPS_DB.findIndex(c => c.id === cropId);
-      if (cropIdx === -1) {
-        return sendJSON(res, 404, { detail: `Crop with ID ${cropId} not found.` });
+      if (!mongoose.Types.ObjectId.isValid(cropId)) {
+        return sendJSON(res, 400, { detail: `Invalid ID format.` });
       }
 
       const bodyText = await getRequestBody(req);
@@ -263,30 +209,30 @@ const server = http.createServer(async (req, res) => {
         return sendJSON(res, 400, { detail: "Invalid JSON body format." });
       }
 
-      const existingCrop = CROPS_DB[cropIdx];
-      const updatedCrop = {
-        ...existingCrop,
-        ...payload,
-        id: existingCrop.id // Prevent modifying ID
-      };
-
-      CROPS_DB[cropIdx] = updatedCrop;
-      return sendJSON(res, 200, updatedCrop);
+      const updatedCrop = await Crop.findByIdAndUpdate(cropId, payload, { returnDocument: 'after' });
+      if (updatedCrop) {
+        return sendJSON(res, 200, updatedCrop);
+      } else {
+        return sendJSON(res, 404, { detail: `Crop with ID ${cropId} not found.` });
+      }
     }
 
     // Endpoint: DELETE /api/crops/:id
     const cropDeleteMatch = pathname.match(/^\/api\/crops\/([^/]+)$/);
     if (cropDeleteMatch && req.method === 'DELETE') {
       const cropId = cropDeleteMatch[1];
-      const cropIdx = CROPS_DB.findIndex(c => c.id === cropId);
-      if (cropIdx === -1) {
-        return sendJSON(res, 404, { detail: `Crop with ID ${cropId} not found.` });
+      if (!mongoose.Types.ObjectId.isValid(cropId)) {
+        return sendJSON(res, 400, { detail: `Invalid ID format.` });
       }
 
-      CROPS_DB.splice(cropIdx, 1);
-      res.writeHead(204);
-      res.end();
-      return;
+      const deletedCrop = await Crop.findByIdAndDelete(cropId);
+      if (deletedCrop) {
+        res.writeHead(204);
+        res.end();
+        return;
+      } else {
+        return sendJSON(res, 404, { detail: `Crop with ID ${cropId} not found.` });
+      }
     }
 
     // Endpoint: POST /api/chat

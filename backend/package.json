@@ -7,6 +7,9 @@
     "start": "node server.js",
     "dev": "node --watch server.js"
   },
-  "dependencies": {},
-  "devDependencies": {}
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "mongoose": "^9.7.4",
+    "prisma": "^5.22.0"
+  }
 }
